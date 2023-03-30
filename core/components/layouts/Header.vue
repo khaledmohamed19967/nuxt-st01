@@ -13,8 +13,32 @@
         </v-app-bar-title>
 
         <!-- login and logout button -->
-        <v-btn> Login </v-btn>
+        <v-btn @click="toggleAuth"> {{ isLoggedIn ? "Logout" : "Login" }}</v-btn>
       </v-app-bar>
     </div>
   </v-layout>
 </template>
+
+<script>
+export default defineComponent({
+  setup() {
+    const router = useRouter();
+    const {value: token} = useCookie("token");
+    const isLoggedIn = ref(false);
+
+    const toggleAuth = () => {
+      if (isLoggedIn) token.value = atob(token.value);
+      router.push('/')
+    }
+
+    onMounted(() => {
+      if (token) isLoggedIn.value = true;
+    })
+
+    return {
+      isLoggedIn,
+      toggleAuth
+    }
+  }
+})
+</script>
