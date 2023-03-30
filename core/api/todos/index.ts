@@ -24,7 +24,7 @@ export default function useTodos() {
       const { data } = await axios.delete(`/todos/${todo_id}`);
       return data;
     } catch (error: any) {
-     return error.response.data.message
+     return error.response.data
     }
   };
 
