@@ -60,7 +60,7 @@
 import { ref } from "vue";
 import useUsers from "~/api/users";
 import useTodos from "~/api/todos";
-import useAuthorization from "~/composible/useAuthorization";
+import useAuthorization from "~/composables/useAuthorization";
 
 definePageMeta({
   middleware: "guest",

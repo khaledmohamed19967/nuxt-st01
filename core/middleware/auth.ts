@@ -1,4 +1,4 @@
-import useAuthorization from "~/composible/useAuthorization";
+import useAuthorization from "~/composables/useAuthorization";
 
 export default defineNuxtRouteMiddleware(() => {
   const { token } = useAuthorization();

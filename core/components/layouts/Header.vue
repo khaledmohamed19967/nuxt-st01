@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import useAuthorization from "~/composible/useAuthorization";
+import useAuthorization from "~/composables/useAuthorization";
 
 export default defineComponent({
   setup() {
