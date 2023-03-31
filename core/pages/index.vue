@@ -34,6 +34,7 @@
       <!-- enter password -->
       <v-text-field
         v-model="password"
+        type="password"
         class="mb-5"
         placeholder="Enter your password"
         variant="outlined"
