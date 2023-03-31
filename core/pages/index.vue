@@ -34,7 +34,7 @@
       <!-- enter password -->
       <v-text-field
         v-model="password"
-        class="m-5"
+        class="mb-5"
         placeholder="Enter your password"
         variant="outlined"
         hide-details
@@ -47,7 +47,7 @@
         color="blue"
         size="large"
         variant="tonal"
-        @click.prevent="login"
+        @click.prevent="submitLogin"
       >
         Log In
       </v-btn>
@@ -59,7 +59,11 @@
 import { ref } from "vue";
 import useUsers from "~/api/users";
 import useTodos from "~/api/todos";
-import useAuth from "~/api/auth";
+import useAuthorization from "~/composible/useAuthorization";
+
+definePageMeta({
+  middleware: "guest",
+});
 
 export default defineComponent({
   setup() {
@@ -68,31 +72,33 @@ export default defineComponent({
 
     const password = ref("");
 
-    const login = async () => {
+    const submitLogin = () => {
+      const { login, setUserData } = useAuthorization();
       const { getUserTodos } = useTodos();
-      const { login } = useAuth();
 
       const userLoginData = {
-        username: selectedUser.value.username,
-        password: password.value,
+        userData: { ...selectedUser.value, password: password.value },
       };
 
-      // login
-      await login(userLoginData);
+      // handle login
+      login(userLoginData);
 
-      // try to catch user todos list to check if user is existed
-      try {
-        const response = await getUserTodos();
-        // redirect to dashboard if response success
-        if (response) router.push("/dashboard");
-      } catch (e) {}
+      // get users todos to check if user is existed
+      getUserTodos()
+        .then(() => {
+          setUserData(selectedUser.value);
+          router.push("/dashboard");
+        })
+        .catch((error) => {
+          alert(error.response.data.message);
+        });
     };
 
     return {
       usersList,
       selectedUser,
       password,
-      login,
+      submitLogin,
     };
   },
 });
@@ -104,10 +110,14 @@ export default defineComponent({
 const usersListHandle = () => {
   const { getUsersList } = useUsers();
   const usersList = ref([]);
-  const selectedUser = ref({});
+  const selectedUser = ref(null);
 
-  onMounted(async () => {
-    usersList.value = await getUsersList();
+  onMounted(() => {
+    getUsersList()
+      .then((response) => {
+        usersList.value = response;
+      })
+      .catch(() => {});
   });
 
   return {

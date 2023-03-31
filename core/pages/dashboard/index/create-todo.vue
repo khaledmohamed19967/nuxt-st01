@@ -10,11 +10,11 @@
       <!-- page title -->
       <h1 class="text-center my-3">Create New Todo</h1>
 
-      <!-- enter password -->
+      <!-- create todo -->
       <v-text-field
         v-model="formData.task"
-        class="m-5"
-        placeholder="Enter your password"
+        class="mb-5"
+        placeholder="create new todo"
         variant="outlined"
         hide-details
       ></v-text-field>
@@ -44,12 +44,13 @@ export default defineComponent({
     const router = useRouter();
     const formData = ref({});
 
-    const create = async () => {
+    const create = () => {
       const { createNewTodo } = useTodos();
-      try {
-        await createNewTodo(formData.value);
-        router.push("/dashboard/listing");
-      } catch (error) {}
+      createNewTodo(formData.value)
+        .then(() => {
+          router.push("/dashboard");
+        })
+        .catch(() => {});
     };
 
     return {
@@ -59,23 +60,4 @@ export default defineComponent({
     };
   },
 });
-
-/**
- * this method invoke for handle users selected Data
- * @returns {{usersList: Ref<UnwrapRef<null>>, selectedUser: Ref<UnwrapRef<null>>}}
- */
-const usersListHandle = () => {
-  const { getUsersList } = useUsers();
-  const usersList = ref([]);
-  const selectedUser = ref({});
-
-  onMounted(async () => {
-    usersList.value = await getUsersList();
-  });
-
-  return {
-    usersList,
-    selectedUser,
-  };
-};
 </script>

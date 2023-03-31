@@ -3,42 +3,38 @@
     <div class="mb-10">
       <v-app-bar class="" color="primary" density="compact">
         <v-app-bar-title>
-          <!--        <v-avatar outlined size="36px">-->
-          <!--          <v-img-->
-          <!--            alt="Avatar"-->
-          <!--            :src="selectedUser.avatar"-->
-          <!--          ></v-img>-->
-          <!--        </v-avatar>-->
-          <p>khaled mohmaed</p>
+          <div class="d-flex align-center">
+            <v-avatar outlined size="36px">
+              <v-img alt="Avatar" :src="getUserData.avatar"></v-img>
+            </v-avatar>
+            <p style="font-size: 14px">{{ getUserData.name }}</p>
+          </div>
         </v-app-bar-title>
 
         <!-- login and logout button -->
-        <v-btn @click="toggleAuth"> {{ isLoggedIn ? "Logout" : "Login" }}</v-btn>
+        <v-btn @click="toggleAuth">
+          {{ getUserData ? "Logout" : "Login" }}</v-btn
+        >
       </v-app-bar>
     </div>
   </v-layout>
 </template>
 
 <script>
+import useAuthorization from "~/composible/useAuthorization";
+
 export default defineComponent({
   setup() {
-    const router = useRouter();
-    const {value: token} = useCookie("token");
-    const isLoggedIn = ref(false);
+    const { logout, getUserData } = useAuthorization();
 
     const toggleAuth = () => {
-      if (isLoggedIn) token.value = atob(token.value);
-      router.push('/')
-    }
-
-    onMounted(() => {
-      if (token) isLoggedIn.value = true;
-    })
+      if (getUserData) logout();
+    };
 
     return {
-      isLoggedIn,
-      toggleAuth
-    }
-  }
-})
+      getUserData,
+      toggleAuth,
+    };
+  },
+});
 </script>

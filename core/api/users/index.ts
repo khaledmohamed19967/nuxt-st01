@@ -1,13 +1,17 @@
 import axios from "../axios";
 
 export default function useUsers() {
-  const getUsersList = async () => {
-    try {
-      const { data } = await axios.get("/users");
-      return data;
-    } catch (error: any) {
-      throw new Error(error);
-    }
+  const getUsersList = () => {
+    return new Promise((resolve, reject) => {
+      axios
+        .get("/users")
+        .then((response) => {
+          resolve(response.data);
+        })
+        .catch((error) => {
+          reject(error.response.data);
+        });
+    });
   };
 
   return {

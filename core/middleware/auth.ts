@@ -1,8 +1,9 @@
-export default defineNuxtRouteMiddleware(() => {
-  const { value: token } = useCookie("token");
+import useAuthorization from "~/composible/useAuthorization";
 
+export default defineNuxtRouteMiddleware(() => {
+  const { token } = useAuthorization();
   // check if token is valid
-  if (!token) {
+  if (!token.value) {
     return navigateTo({ path: `/` });
   }
 });

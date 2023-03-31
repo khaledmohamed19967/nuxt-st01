@@ -3,14 +3,14 @@
     <!-- table head -->
     <thead>
       <tr>
-        <th v-for="head in tableHeader" class="text-left">
+        <th v-for="head in tableHeader" :key="head" class="text-left">
           {{ head }}
         </th>
       </tr>
     </thead>
     <!-- table body -->
     <tbody>
-      <tr v-for="task in tableData" :key="task.name">
+      <tr v-for="task in tableData" :key="task.id">
         <td>{{ task.task || "No task title" }}</td>
         <td>{{ task.completed }}</td>
         <td>

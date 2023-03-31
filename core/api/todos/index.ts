@@ -5,59 +5,75 @@ export default function useTodos() {
    * This function invokes for
    * fetch todos list
    */
-  const getUserTodos = async () => {
-    try {
-      const { data } = await axios.get("/todos");
-      return data;
-    } catch (error: any) {
-      return error.response.data.message;
-    }
+  const getUserTodos = () => {
+    return new Promise((resolve, reject) => {
+      axios
+        .get("/todos")
+        .then((response) => {
+          resolve(response.data);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
   };
 
   /**
    * This function invokes for
    * delete single todo item
-   * @param todo_id
+   * @param todoId
    */
-  const deleteSingleTodo = async (todo_id: number) => {
-    try {
-      const { data } = await axios.delete(`/todos/${todo_id}`);
-      return data;
-    } catch (error: any) {
-      return error.response;
-    }
+  const deleteSingleTodo = (todoId: number) => {
+    return new Promise((resolve, reject) => {
+      axios
+        .delete(`/todos/${todoId}`)
+        .then((response) => {
+          resolve(response.data);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
   };
 
   /**
    * This function invokes for
    * create new todo
    */
-  const createNewTodo = async (taskPayload) => {
-    try {
-      const { data } = await axios.post(`/todos`, taskPayload);
-      return data;
-    } catch (error: any) {
-      return error.response.data.message;
-    }
+  const createNewTodo = (taskPayload: {}) => {
+    return new Promise((resolve, reject) => {
+      axios
+        .post(`/todos`, taskPayload)
+        .then((response) => {
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
   };
 
   /**
    * This function invokes for
    * create new todo
    */
-  const todoCompleted = async (todo_id) => {
-    try {
-      const { data } = await axios.put(`/todos/${todo_id}`);
-      return data;
-    } catch (error: any) {
-      return error.response.data.message;
-    }
+  const todoCompleted = (todoId: number) => {
+    return new Promise((resolve, reject) => {
+      axios
+        .put(`/todos/${todoId}`)
+        .then((response) => {
+          resolve(response.data);
+        })
+        .catch((error) => {
+          reject(error.response.data);
+        });
+    });
   };
 
   return {
     getUserTodos,
     deleteSingleTodo,
     createNewTodo,
-    todoCompleted
+    todoCompleted,
   };
 }

@@ -9,7 +9,7 @@ import { defineComponent, ref } from "vue";
 
 export default defineComponent({
   props: {
-    text: { type: String, require: true },
+    text: { type: String, require: true, default: "snackbar app" },
   },
 
   setup() {
